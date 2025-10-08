@@ -1,0 +1,16 @@
+// Source code is decompiled from a .class file using FernFlower decompiler (from Intellij IDEA).
+package file_handling;
+
+class Address {
+   int id;
+   int pincode;
+   String city;
+   int studentId;
+
+   Address(int var1, int var2, String var3, int var4) {
+      this.id = var1;
+      this.pincode = var2;
+      this.city = var3;
+      this.studentId = var4;
+   }
+}
