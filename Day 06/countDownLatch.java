@@ -28,9 +28,9 @@ class Services extends Thread {
 public class countDownLatch {
   public static void main(String[] args) throws InterruptedException {
     CountDownLatch cl = new CountDownLatch(3);
-    Services s1 = new Services("Service 1", cl);
-    Services s2 = new Services("Service 2", cl);
-    Services s3 = new Services("Service 3", cl);
+    Services s1 = new Services("loading configuration", cl);
+    Services s2 = new Services("connecting to the database", cl);
+    Services s3 = new Services("setup", cl);
 
     s1.start();
     s2.start();
