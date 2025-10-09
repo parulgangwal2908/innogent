@@ -22,7 +22,7 @@ public class parallel {
 
       futures[t] = es.submit(() -> {
         for (int i = start; i <= end; i++) {
-          int square = i * i; // perform square operation
+          int square = i * i;
         }
       });
     }
