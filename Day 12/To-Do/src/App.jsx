@@ -1,48 +1,50 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import TodoForm from './components/TodoForm'
+import TodoList from './components/TodoList'
 import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import TodoList from './components/TodoList'
-
 function App() {
-  const[tasks,setTask]=useState([])
+  const [tasks, setTasks] = useState([]);
+  const isInitialMount = useRef(true);
 
-  useEffect(()=>{
-    const savedTasks=JSON.parse(localStorage.getItem("tasks"))||[]
-    setTask(savedTasks)
+  useEffect(() => {
+    const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    setTasks(savedTasks);
+  }, []);
 
-  },[])
-  
-  useEffect(()=>{
-    localStorage.setItem("tasks",JSON.stringify(tasks))
-  },[tasks])
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return; 
+    }
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
-  const addTask=(text)=>{
-    const newTask={id:Date.now(),text}
-    setTask([...tasks,newTask])
-  }
-  const editTask=(id,newText)=>{
-    const updatedTasks=tasks.map((task)=>
-      task.id===id ? {...task,text:newText} : task
-    )
-    setTask(updatedTasks)
+  const addTask = (text) => {
+    const newTask = { id: Date.now(), text };
+    setTasks([...tasks, newTask]);
+  };
 
-  }
-  const deleteTask=(id)=>{
-    const filteredTasks=tasks.filter((task)=>task.id!==id)
-    setTask(filteredTasks)
-  }
-  
+  const editTask = (id, newText) => {
+    const updatedTasks = tasks.map((task) =>
+      task.id === id ? { ...task, text: newText } : task
+    );
+    setTasks(updatedTasks);
+  };
+
+  const deleteTask = (id) => {
+    const filteredTasks = tasks.filter((task) => task.id !== id);
+    setTasks(filteredTasks);
+  };
+
   return (
     <div className="App">
       <h1>To-Do List</h1>
-      <TodoForm addTask={addTask}/>
-      <TodoList tasks={tasks} editTask={editTask} deleteTask={deleteTask}/>
+      <TodoForm addTask={addTask} />
+      <TodoList tasks={tasks} editTask={editTask} deleteTask={deleteTask} />
     </div>
-  ) 
-
-
+  );
 }
 
-export default App
+export default App;
