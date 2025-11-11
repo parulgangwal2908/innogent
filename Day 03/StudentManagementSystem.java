@@ -1,0 +1,300 @@
+import java.util.*;
+
+class Class {
+    int id;
+    String name;
+
+    Class(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+}
+
+class Student {
+    int id;
+    String name;
+    int classId;
+    int marks;
+    String gender;
+    int age;
+
+    Student(int id, String name, int classId, int marks, String gender, int age) {
+        this.id = id;
+        this.name = name;
+        this.classId = classId;
+        this.marks = marks;
+        this.gender = gender;
+        this.age = age;
+    }
+}
+
+class Address {
+    int id;
+    int pincode;
+    String city;
+    int studentId;
+
+    Address(int id, int pincode, String city, int studentId) {
+        this.id = id;
+        this.pincode = pincode;
+        this.city = city;
+        this.studentId = studentId;
+    }
+}
+
+public class StudentManagementSystem {
+    static List<Class> classes = new ArrayList<>();
+    static List<Student> students = new ArrayList<>();
+    static List<Address> addresses = new ArrayList<>();
+
+    // Add Student with validation for invalid data
+    static void addStudent(Student s) {
+        if (s.name == null || s.gender == null || s.classId <= 0 || s.age >= 20 || s.marks < 0 || s.marks > 100) {
+            System.out.println("Invalid student data for: " + (s.name == null ? "Unknown" : s.name));
+            return;
+        }
+        students.add(s);
+    }
+
+    // Add Class with duplicate check
+    static void addClass(Class c) {
+        for (Class existingClass : classes) {
+            if (existingClass.id == c.id) {
+                System.out.println("Class with ID " + c.id + " already exists.");
+                return;
+            }
+        }
+        classes.add(c);
+    }
+
+    // Add Address with validation
+    static void addAddress(Address a) {
+        if (a.city == null || a.pincode <= 0) {
+            System.out.println("Invalid address data for student ID: " + a.studentId);
+            return;
+        }
+        addresses.add(a);
+    }
+
+    // Rank Students based on marks
+    static void rankStudents() {
+        students.sort((a, b) -> {
+            if (b.marks == a.marks) {
+                return a.name.compareToIgnoreCase(b.name); // Sort by name if marks are tied
+            }
+            return b.marks - a.marks;
+        });
+
+        for (int i = 0; i < students.size(); i++) {
+            System.out.println("Rank " + (i + 1) + ": " + students.get(i).name + " (" + students.get(i).marks + ")");
+        }
+    }
+
+    // Find students by Pincode
+    static void findByPincode(int pincode) {
+        boolean found = false;
+        for (Address a : addresses) {
+            if (a.pincode == pincode) {
+                found = true;
+                for (Student s : students) {
+                    if (s.id == a.studentId) {
+                        System.out.println(s.name + " from " + a.city + " (Pincode: " + a.pincode + ")");
+                    }
+                }
+            }
+        }
+        if (!found) {
+            System.out.println("No students found in Pincode: " + pincode);
+        }
+    }
+
+    // Find students by City
+    static void findByCity(String city) {
+        boolean found = false;
+        for (Address a : addresses) {
+            if (a.city.equalsIgnoreCase(city)) {
+                found = true;
+                for (Student s : students) {
+                    if (s.id == a.studentId) {
+                        System.out.println("🎓 " + s.name + " lives in " + city);
+                    }
+                }
+            }
+        }
+        if (!found) {
+            System.out.println("No students found in City: " + city);
+        }
+    }
+
+    // Find students by Class
+    static void findByClass(String className) {
+        boolean classFound = false;
+        for (Class c : classes) {
+            if (c.name.equalsIgnoreCase(className)) {
+                classFound = true;
+                for (Student s : students) {
+                    if (s.classId == c.id) {
+                        System.out.println(s.name + " belongs to Class " + c.name);
+                    }
+                }
+            }
+        }
+        if (!classFound) {
+            System.out.println("Class " + className + " not found.");
+        }
+    }
+
+    // Check if a student passed
+    static void checkPass(Student s) {
+        if (s.marks > 50) {
+            System.out.println(s.name + " -> Passed");
+        }
+    }
+
+    // Check if a student failed
+    static void checkFail(Student s) {
+        if (s.marks < 50) {
+            System.out.println(s.name + " -> Failed");
+        }
+    }
+
+    // Delete Student and handle empty class check
+    static void deleteStudent(int studentId) {
+        students.removeIf(s -> s.id == studentId);
+        addresses.removeIf(a -> a.studentId == studentId);
+
+        // Check if class is empty and delete
+        for (Iterator<Class> it = classes.iterator(); it.hasNext();) {
+            Class c = it.next();
+            boolean hasStudent = false;
+            for (Student s : students) {
+                if (s.classId == c.id) {
+                    hasStudent = true;
+                    break;
+                }
+            }
+            if (!hasStudent) {
+                System.out.println("Class " + c.name + " deleted (no students left)");
+                it.remove();
+            }
+        }
+    }
+
+    // Pagination for female students (1 to 9, ordered by marks)
+    static void femaleStudents1to9ByMarks() {
+        List<Student> filtered = new ArrayList<>();
+        for (Student s : students) {
+            if (s.gender.equalsIgnoreCase("F")) {
+                filtered.add(s);
+            }
+        }
+        filtered.sort((a, b) -> b.marks - a.marks);
+        for (int i = 0; i < 9 && i < filtered.size(); i++) {
+            System.out.println(filtered.get(i).name + " (" + filtered.get(i).marks + ")");
+        }
+    }
+
+    // Female students 7-8, ordered by name
+    static void femaleStudents7to8ByName() {
+        List<Student> filtered = new ArrayList<>();
+        for (Student s : students) {
+            if (s.gender.equalsIgnoreCase("F")) {
+                filtered.add(s);
+            }
+        }
+        filtered.sort(Comparator.comparing(s -> s.name));
+        for (int i = 6; i < 8 && i < filtered.size(); i++) {
+            System.out.println(filtered.get(i).name + " (" + filtered.get(i).marks + ")");
+        }
+    }
+
+    // Female students 1-5, ordered by marks
+    static void femaleStudents1to5ByMarks() {
+        List<Student> filtered = new ArrayList<>();
+        for (Student s : students) {
+            if (s.gender.equalsIgnoreCase("F")) {
+                filtered.add(s);
+            }
+        }
+        filtered.sort((a, b) -> b.marks - a.marks);
+        for (int i = 0; i < 5 && i < filtered.size(); i++) {
+            System.out.println(filtered.get(i).name + " (" + filtered.get(i).marks + ")");
+        }
+    }
+
+    // Female students 9-50, ordered by marks
+    static void femaleStudents9to50ByMarks() {
+        List<Student> filtered = new ArrayList<>();
+        for (Student s : students) {
+            if (s.gender.equalsIgnoreCase("F")) {
+                filtered.add(s);
+            }
+        }
+        filtered.sort((a, b) -> b.marks - a.marks);
+        for (int i = 8; i < 50 && i < filtered.size(); i++) {
+            System.out.println(filtered.get(i).name + " (" + filtered.get(i).marks + ")");
+        }
+    }
+
+    public static void main(String[] args) {
+        addClass(new Class(1, "A"));
+        addClass(new Class(2, "B"));
+        addClass(new Class(3, "C"));
+        addClass(new Class(4, "D"));
+
+        addStudent(new Student(1, "stud1", 1, 88, "F", 10));
+        addStudent(new Student(2, "stud2", 1, 70, "F", 11));
+        addStudent(new Student(3, "stud3", 2, 88, "M", 22)); // Age > 20 → will be rejected
+        addStudent(new Student(4, "stud4", 2, 55, "M", 33)); // Age > 20 → will be rejected
+        addStudent(new Student(5, "stud5", 1, 30, "F", 44)); // Age > 20 → will be rejected
+        addStudent(new Student(6, "stud6", 3, 30, "F", 33)); // Age > 20 → will be rejected
+        addStudent(new Student(7, "stud7", 3, 10, "F", 22)); // Age > 20 → will be rejected
+        addStudent(new Student(8, "stud8", 3, 0, "M", 11));
+
+        addAddress(new Address(1, 452002, "Indore", 1));
+        addAddress(new Address(2, 422002, "Delhi", 1));
+        addAddress(new Address(3, 442002, "Indore", 2));
+        addAddress(new Address(4, 462002, "Delhi", 3));
+        addAddress(new Address(5, 472002, "Indore", 4));
+        addAddress(new Address(6, 452002, "Indore", 5));
+        addAddress(new Address(7, 452002, "Delhi", 5));
+        addAddress(new Address(8, 482002, "Mumbai", 6));
+        addAddress(new Address(9, 482002, "Bhopal", 7));
+        addAddress(new Address(10, 482002, "Indore", 8));
+
+        System.out.println("Ranking:");
+        rankStudents();
+
+        System.out.println("Find By Pincode");
+        findByPincode(452002);
+
+        System.out.println("Find By City");
+        findByCity("Indore");
+
+        System.out.println("Find By Class");
+        findByClass("A");
+
+        System.out.println("Check Pass");
+        for (Student s : students) {
+            checkPass(s);
+        }
+        System.out.println("Check Fail");
+        for (Student s : students) {
+            checkFail(s);
+        }
+        System.out.println("Delete Student (with address + empty class check)");
+        deleteStudent(1);
+
+        System.out.println("Read female students, records 1-9");
+        femaleStudents1to9ByMarks();
+
+        System.out.println("Read female students, records 7-8, ordered by name");
+        femaleStudents7to8ByName();
+
+        System.out.println("Read female students, records 1-5, ordered by marks.");
+        femaleStudents1to5ByMarks();
+
+        System.out.println("Read female students, records 9-50, ordered by marks");
+        femaleStudents9to50ByMarks();
+    }
+}
