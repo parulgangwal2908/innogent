@@ -110,7 +110,7 @@ public class StudentManagementSystem {
                 found = true;
                 for (Student s : students) {
                     if (s.id == a.studentId) {
-                        System.out.println("🎓 " + s.name + " lives in " + city);
+                        System.out.println(s.name + " lives in " + city);
                     }
                 }
             }
