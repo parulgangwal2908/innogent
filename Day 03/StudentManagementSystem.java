@@ -47,7 +47,6 @@ public class StudentManagementSystem {
     static List<Student> students = new ArrayList<>();
     static List<Address> addresses = new ArrayList<>();
 
-    // Add Student with validation for invalid data
     static void addStudent(Student s) {
         if (s.name == null || s.gender == null || s.classId <= 0 || s.age >= 20 || s.marks < 0 || s.marks > 100) {
             System.out.println("Invalid student data for: " + (s.name == null ? "Unknown" : s.name));
@@ -56,7 +55,6 @@ public class StudentManagementSystem {
         students.add(s);
     }
 
-    // Add Class with duplicate check
     static void addClass(Class c) {
         for (Class existingClass : classes) {
             if (existingClass.id == c.id) {
@@ -67,7 +65,6 @@ public class StudentManagementSystem {
         classes.add(c);
     }
 
-    // Add Address with validation
     static void addAddress(Address a) {
         if (a.city == null || a.pincode <= 0) {
             System.out.println("Invalid address data for student ID: " + a.studentId);
@@ -76,11 +73,10 @@ public class StudentManagementSystem {
         addresses.add(a);
     }
 
-    // Rank Students based on marks
     static void rankStudents() {
         students.sort((a, b) -> {
             if (b.marks == a.marks) {
-                return a.name.compareToIgnoreCase(b.name); // Sort by name if marks are tied
+                return a.name.compareToIgnoreCase(b.name);
             }
             return b.marks - a.marks;
         });
@@ -90,7 +86,6 @@ public class StudentManagementSystem {
         }
     }
 
-    // Find students by Pincode
     static void findByPincode(int pincode) {
         boolean found = false;
         for (Address a : addresses) {
@@ -108,7 +103,6 @@ public class StudentManagementSystem {
         }
     }
 
-    // Find students by City
     static void findByCity(String city) {
         boolean found = false;
         for (Address a : addresses) {
@@ -126,7 +120,6 @@ public class StudentManagementSystem {
         }
     }
 
-    // Find students by Class
     static void findByClass(String className) {
         boolean classFound = false;
         for (Class c : classes) {
@@ -144,26 +137,22 @@ public class StudentManagementSystem {
         }
     }
 
-    // Check if a student passed
     static void checkPass(Student s) {
         if (s.marks > 50) {
             System.out.println(s.name + " -> Passed");
         }
     }
 
-    // Check if a student failed
     static void checkFail(Student s) {
         if (s.marks < 50) {
             System.out.println(s.name + " -> Failed");
         }
     }
 
-    // Delete Student and handle empty class check
     static void deleteStudent(int studentId) {
         students.removeIf(s -> s.id == studentId);
         addresses.removeIf(a -> a.studentId == studentId);
 
-        // Check if class is empty and delete
         for (Iterator<Class> it = classes.iterator(); it.hasNext();) {
             Class c = it.next();
             boolean hasStudent = false;
@@ -180,7 +169,6 @@ public class StudentManagementSystem {
         }
     }
 
-    // Pagination for female students (1 to 9, ordered by marks)
     static void femaleStudents1to9ByMarks() {
         List<Student> filtered = new ArrayList<>();
         for (Student s : students) {
@@ -194,7 +182,6 @@ public class StudentManagementSystem {
         }
     }
 
-    // Female students 7-8, ordered by name
     static void femaleStudents7to8ByName() {
         List<Student> filtered = new ArrayList<>();
         for (Student s : students) {
@@ -208,7 +195,6 @@ public class StudentManagementSystem {
         }
     }
 
-    // Female students 1-5, ordered by marks
     static void femaleStudents1to5ByMarks() {
         List<Student> filtered = new ArrayList<>();
         for (Student s : students) {
@@ -222,7 +208,6 @@ public class StudentManagementSystem {
         }
     }
 
-    // Female students 9-50, ordered by marks
     static void femaleStudents9to50ByMarks() {
         List<Student> filtered = new ArrayList<>();
         for (Student s : students) {
@@ -244,11 +229,11 @@ public class StudentManagementSystem {
 
         addStudent(new Student(1, "stud1", 1, 88, "F", 10));
         addStudent(new Student(2, "stud2", 1, 70, "F", 11));
-        addStudent(new Student(3, "stud3", 2, 88, "M", 22)); // Age > 20 → will be rejected
-        addStudent(new Student(4, "stud4", 2, 55, "M", 33)); // Age > 20 → will be rejected
-        addStudent(new Student(5, "stud5", 1, 30, "F", 44)); // Age > 20 → will be rejected
-        addStudent(new Student(6, "stud6", 3, 30, "F", 33)); // Age > 20 → will be rejected
-        addStudent(new Student(7, "stud7", 3, 10, "F", 22)); // Age > 20 → will be rejected
+        addStudent(new Student(3, "stud3", 2, 88, "M", 22));
+        addStudent(new Student(4, "stud4", 2, 55, "M", 33));
+        addStudent(new Student(5, "stud5", 1, 30, "F", 44));
+        addStudent(new Student(6, "stud6", 3, 30, "F", 33));
+        addStudent(new Student(7, "stud7", 3, 10, "F", 22));
         addStudent(new Student(8, "stud8", 3, 0, "M", 11));
 
         addAddress(new Address(1, 452002, "Indore", 1));
