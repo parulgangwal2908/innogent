@@ -74,15 +74,28 @@ public class StudentManagementSystem {
     }
 
     static void rankStudents() {
+
         students.sort((a, b) -> {
-            if (b.marks == a.marks) {
-                return a.name.compareToIgnoreCase(b.name);
-            }
             return b.marks - a.marks;
         });
 
+        int rank = 1;
+        System.out.println("Ranks:");
+
         for (int i = 0; i < students.size(); i++) {
-            System.out.println("Rank " + (i + 1) + ": " + students.get(i).name + " (" + students.get(i).marks + ")");
+
+            if (i == 0) {
+                System.out.println("Rank " + rank + ": " + students.get(i).name + " (" + students.get(i).marks + ")");
+            } else {
+                if (students.get(i).marks == students.get(i - 1).marks) {
+                    System.out
+                            .println("Rank " + rank + ": " + students.get(i).name + " (" + students.get(i).marks + ")");
+                } else {
+                    rank = i + 1;
+                    System.out
+                            .println("Rank " + rank + ": " + students.get(i).name + " (" + students.get(i).marks + ")");
+                }
+            }
         }
     }
 

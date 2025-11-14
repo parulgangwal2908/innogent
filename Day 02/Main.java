@@ -5,7 +5,7 @@ class Employee implements Comparable<Employee> {
     private String name;
     private String department;
     private double salary;
-    
+
     public Employee(int id, String name, String department, double salary) {
         this.id = id;
         this.name = name;
@@ -13,18 +13,31 @@ class Employee implements Comparable<Employee> {
         this.salary = salary;
     }
 
-    public int getId() { return id; }
-    public String getName() { return name; }
-    public String getDepartment() { return department; }
-    public double getSalary() { return salary; }
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
 
     @Override
     public int compareTo(Employee other) {
         int deptCompare = this.department.compareTo(other.department);
-        if (deptCompare != 0) return deptCompare;
+        if (deptCompare != 0)
+            return deptCompare;
 
         int nameCompare = this.name.compareTo(other.name);
-        if (nameCompare != 0) return nameCompare;
+        if (nameCompare != 0)
+            return nameCompare;
 
         return Double.compare(this.salary, other.salary);
     }
@@ -52,7 +65,8 @@ public class Main {
         System.out.println(" Sort by Department → Name → Salary ");
         Collections.sort(employees); // uses compareTo
         Iterator<Employee> it1 = employees.iterator();
-        while (it1.hasNext()) System.out.println(it1.next());
+        while (it1.hasNext())
+            System.out.println(it1.next());
 
         System.out.println("Sort by Salary Descending");
         Collections.sort(employees, new Comparator<Employee>() {
@@ -62,6 +76,7 @@ public class Main {
             }
         });
         Iterator<Employee> it2 = employees.iterator();
-        while (it2.hasNext()) System.out.println(it2.next());
+        while (it2.hasNext())
+            System.out.println(it2.next());
     }
 }
